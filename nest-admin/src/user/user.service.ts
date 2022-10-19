@@ -17,7 +17,26 @@ export class UserService {
         return await this.userRepository.find();
     }
 
-    async create(data: CreateUserDto): Promise<User> {
+    async paginate(page: number = 1): Promise<any> {
+        const take = 1;
+        const [users, total] = await this.userRepository.findAndCount(
+            {take, skip: (page - 1) * take, relations: {role: true}}
+        );
+
+        return {
+            data: users.map(user => {
+                const {password, ..._user} = user;
+                return _user;
+            }),
+            meta: {
+                total,
+                page,
+                last_page: Math.ceil(total / take)
+            }
+        }
+    }
+
+    async create(data): Promise<User> {
         return await this.userRepository.save(data);
     }
 
