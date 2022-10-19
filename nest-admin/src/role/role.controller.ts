@@ -18,9 +18,15 @@ export class RoleController {
     }
 
     @Post()
-    async create(@Body('name') name: string): Promise<Role> {
+    async create(
+        @Body('name') name: string,
+        @Body('permissions') ids: number[]
+    ): Promise<Role> {
         try {
-            return await this.roleService.create({ name });
+            return await this.roleService.create({
+                name,
+                permissions: ids.map(id => {id})
+             });
         } catch (error) {
             if(error.code === 'ER_DUP_ENTRY')
                 throw new BadRequestException('This role already exists');
@@ -29,16 +35,22 @@ export class RoleController {
 
     @Get(':id')
     async get(@Param('id') id: number) {
-        return this.roleService.findOne({id});
+        return this.roleService.findOne({id}, ['permissions']);
     }
 
     @Put(':id')
     async update(
         @Param('id') id: number,
-        @Body() body: CreateRoleDto
+        @Body('name') name: string,
+        @Body('permissions') ids: number[]
     ) {
-        await this.roleService.update(id, body);
-        return await this.roleService.findOne({id});
+        await this.roleService.update(id, {name,});
+        const role = await this.roleService.findOne({id});
+
+        return await this.roleService.create({
+            ...role,
+            permissions: ids.map(id => {id})
+        })
     }
 
     @Delete(':id')
