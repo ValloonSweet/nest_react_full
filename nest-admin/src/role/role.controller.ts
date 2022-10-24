@@ -14,7 +14,7 @@ export class RoleController {
 
     @Get()
     async all() {
-        return await this.roleService.all();
+        return await this.roleService.all([]);
     }
 
     @Post()

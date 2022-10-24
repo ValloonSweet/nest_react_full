@@ -1,4 +1,5 @@
-import { Column, CreateDateColumn, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+import { Expose } from "class-transformer";
+import { Column, CreateDateColumn, Entity, JoinColumn, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 import { OrderItem } from "./order-item.entity";
 
 @Entity('orders')
@@ -19,5 +20,17 @@ export class Order {
     created_at: string;
 
     @OneToMany(() => OrderItem, orderItem => orderItem.order)
+    @JoinColumn({name: 'order_id'})
     order_items: OrderItem[]
+
+    @Expose()
+    get name(): string {
+        return `${this.first_name} ${this.last_name}`
+    }
+
+    @Expose()
+    get total(): number {
+        if(this.order_items === undefined || this.order_items.length === 0) return 0
+        return this.order_items.reduce((sum, i) => sum + i.quantity * i.price, 0);
+    }
 }

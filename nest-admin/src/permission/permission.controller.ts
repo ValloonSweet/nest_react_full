@@ -11,6 +11,6 @@ export class PermissionController {
 
     @Get()
     async all() {
-        return await this.permissionService.all();
+        return await this.permissionService.all([]);
     }
 }

@@ -16,6 +16,6 @@ export class OrderItem {
     quantity: number;
 
     @ManyToOne(() => Order, order => order.order_items)
-    @JoinColumn({name: 'order_id'})
+    @JoinColumn()
     order: Order
 }
