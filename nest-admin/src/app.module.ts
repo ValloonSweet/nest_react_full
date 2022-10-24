@@ -10,6 +10,8 @@ import { RoleModule } from './role/role.module';
 import { PermissionModule } from './permission/permission.module';
 import { ProductModule } from './product/product.module';
 import { OrderModule } from './order/order.module';
+import { APP_GUARD } from '@nestjs/core';
+import { PermissionGuard } from './permission/permission.guard';
 
 @Module({
   imports: [
@@ -32,6 +34,9 @@ import { OrderModule } from './order/order.module';
     OrderModule
   ],
   controllers: [AppController, RoleController],
-  providers: [AppService],
+  providers: [AppService, {
+    provide: APP_GUARD,
+    useClass: PermissionGuard
+  }],
 })
 export class AppModule {}

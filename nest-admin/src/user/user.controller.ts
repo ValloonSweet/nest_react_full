@@ -6,6 +6,7 @@ import { AuthGuard } from 'src/auth/auth.guard';
 import { UserUpdateDto } from './dto/update-user.dto';
 import { AuthService } from 'src/auth/auth.service';
 import { Request } from 'express';
+import { HasPermission } from 'src/permission/has-permission.decorator';
 
 @UseInterceptors(ClassSerializerInterceptor)
 @UseGuards(AuthGuard)
@@ -18,6 +19,7 @@ export class UserController {
 
     }
 
+    @HasPermission('view_users')
     @Get()
     async all(@Query('page') page: number = 1) : Promise<User[]> {
         return await this.userService.paginate(page, ['role']);

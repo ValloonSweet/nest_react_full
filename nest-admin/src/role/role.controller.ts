@@ -25,7 +25,7 @@ export class RoleController {
         try {
             return await this.roleService.create({
                 name,
-                permissions: ids.map(id => {id})
+                permissions: ids.map(id => ({id}))
              });
         } catch (error) {
             if(error.code === 'ER_DUP_ENTRY')
@@ -49,7 +49,7 @@ export class RoleController {
 
         return await this.roleService.create({
             ...role,
-            permissions: ids.map(id => {id})
+            permissions: ids.map(id => ({id}))
         })
     }
 
