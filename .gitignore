@@ -1,3 +1,4 @@
 nest-admin/node_modules
 nest-admin/.dbdata
 nest-admin/dist
+nest-admin/uploads/*
